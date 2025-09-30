@@ -1,0 +1,10 @@
+build/
+dist/
+venv/
+.vscode/
+
+.env
+
+cinfinity/include/cinfinity/config.hpp
+
+*.pyc
