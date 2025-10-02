@@ -1,0 +1,13 @@
+#pragma once
+
+#ifndef __INCLUDE_CINFINITY_MCTS_MODE_HPP__
+#define __INCLUDE_CINFINITY_MCTS_MODE_HPP__
+
+enum MCTSMode {
+    GREEDY,
+    BALANCED,
+    SOLID,
+    SAFE,
+};
+
+#endif // __INCLUDE_CINFINITY_MCTS_MODE_HPP__

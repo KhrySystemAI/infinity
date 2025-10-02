@@ -11,11 +11,22 @@
 
 namespace cinfinity {
     class ModelHandler {
-        Ort::MemoryInfo m_memoryInfo = Ort::MemoryInfo::createCpu(OrtDeviceAllocator, OrtMemTypeCPU);
+        // Model Details
+        Ort::MemoryInfo m_memoryInfo = Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU);
         Ort::Env m_env;
         Ort::Session m_session;
 
+        // Threading details
+        std::thread m_thread;
+
+        // Batching details
+        std::queue<chess::Board> m_queue;
+        std::mutex m_lock;
+
         ModelHandler(std::string modelPath);
+        ~ModelHandler();
+
+        bool addToQueue(chess::Board& board);
 
         void run();
     }; // class ModelHandler

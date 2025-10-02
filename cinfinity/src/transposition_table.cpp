@@ -10,54 +10,49 @@ void TranspositionTable::getDispatch(std::vector<chess::PackedBoard>& keys, std:
     entries.resize(keys.size());
     int i = 0;
     for(auto& k : keys) {
-        if(contains(k)) entries[i] = m_table[k];
+        if(contains(k)) entries[i] = m_table[k].get();
         else entries[i] = nullptr;
         i++;
     }
 }
 
-bool TranspositionTable::getSubmap(
-    uint16_t idx, uint16_t count, 
-    std::vector<std::pair<chess::PackedBoard, TranspositionTable::Entry*>>& result
-) {
-    size_t total = m_table.size();
-    size_t chunk = total / count;
-    size_t remainder = total % count;
-
-    // distribute remainder: first 'remainder' chunks get an extra element
-    size_t start = idx * chunk + std::min<size_t>(idx, remainder);
-    size_t length = chunk + (idx < remainder ? 1 : 0);
-    size_t end = std::min(start + length, total);
-
-    if (start >= end) {
-        return false; // this partition has no elements
-    }
-
-    // copy [start, end)
-    result.reserve(end - start);
-    auto it = m_table.begin();
-    std::advance(it, start);
-    for (size_t i = start; i < end; ++i, ++it) {
-        result.emplace_back(it->first, it->second);
-    }
-
-    return true;
-}
-
-bool TranspositionTable::insertDispatch(std::vector<std::pair<chess::PackedBoard, TranspositionTable::Entry*>>& values) {
+bool TranspositionTable::insertDispatch(
+    std::vector<std::pair<chess::PackedBoard, std::unique_ptr<Entry>>>& values) 
+{
     bool result = false;
-    for(auto v : values) {
-        if(contains(v.first)) result = true;
-        else m_table[v.first] = v.second;
+    for (auto& v : values) {
+        auto& key = v.first;
+        auto& entry_ptr = v.second;
+
+        if (contains(key)) {
+            result = true; // key already existed
+        } else {
+            m_table.emplace(key, std::move(entry_ptr));
+            // entry_ptr is now null, ownership fully transferred
+        }
     }
     return result;
 }
 
 bool TranspositionTable::removeDispatch(std::vector<chess::PackedBoard>& keys) {
-    bool result = false;
+    bool result = true;
     for(auto k : keys) {
         if(contains(k)) m_table.erase(k);
-        else result = true;
+        else result = false;
     }
     return result;
+}
+
+bool TranspositionTable::removeBytes(size_t bytes) {
+    size_t removed = 0;
+    for (auto it = m_table.begin(); it != m_table.end();) {
+        if (it->second->last_used < current_gen) {
+            removed += it->second->getBytes();
+            it = m_table.erase(it); // erase returns next iterator
+        } else {
+            ++it;
+        }
+        if (removed >= bytes) break;
+    }
+    return removed >= bytes;
 }

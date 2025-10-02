@@ -2,12 +2,12 @@
  * @file: transposition_table.hpp
  * 
  * @details Defines the core TranspositionTable, along with its Entry class and the method of 
- * hashing. The general structure of an entry is a dense 4096 one-hot representing the network's 
- * move policy output, a dense 192 one-hot representing the possible promotions in the position, a
- * value WDL output, and then some MCTS and eviction details. 
+ * hashing. The general structure of an entry is a map representing the network's move policy 
+ * output, a value WDL output, and then some MCTS and eviction details. 
  * 
  * @note The class should in general support concurrent read, however write access is single-
- * threaded only. For more information, see the @ref QueueBuilder and  @ref ModelHandler classes.
+ * threaded only, and should be locked to prevent issues. For more information, see the @ref 
+ * QueueBuilder and  @ref ModelHandler classes.
  * 
  * @author KhrySystemAI
 */
@@ -17,6 +17,7 @@
 #define __INCLUDE_CINFINITY_TRANSPOSITION_TABLE_HPP__
 
 #include "config.hpp"
+#include "wdl.hpp"
 
 namespace cinfinity {
     /**
@@ -66,13 +67,27 @@ namespace cinfinity {
                     return move.move();
                 }
             };
-            ankerl::unordered_dense::map<chess::Move, float, Hash> policy;
-            std::array<float, 3> value;
+            hashing::map<chess::Move, float, Hash> policy;
+            WDL value;
             uint16_t visits;
             uint16_t last_used;
 
-            inline float get_policy(chess::Move move) const {
+            inline float getPolicy(chess::Move move) const {
                 return policy.at(move);
+            }
+
+            inline size_t getBytes() const {
+                constexpr size_t hashsize = sizeof(uint64_t);
+                constexpr size_t keysize = sizeof(chess::PackedBoard);
+                constexpr size_t uint16size = sizeof(uint16_t);
+                constexpr size_t movesize = sizeof(chess::Move);
+                constexpr size_t floatsize = sizeof(float);
+
+                size_t policysize = policy.size() * (uint16size + movesize + floatsize);
+                size_t valuesize = value.size() * floatsize;
+                size_t visitsize = uint16size;
+                size_t lastusedsize = uint16size;
+                return hashsize + keysize + policysize + valuesize + visitsize + lastusedsize;
             }
         }; // struct Entry
 
@@ -103,7 +118,7 @@ namespace cinfinity {
          * 
          * @return A bool representing if a node was not written due to it already existing.
         */
-        bool insertDispatch(std::vector<std::pair<chess::PackedBoard, Entry*>>& entries);
+        bool insertDispatch(std::vector<std::pair<chess::PackedBoard, std::unique_ptr<Entry>>>& entries);
 
         /**
          * @brief Remove a batch entries from the table corresponding to the given board states.
@@ -116,7 +131,15 @@ namespace cinfinity {
         */
         bool removeDispatch(std::vector<chess::PackedBoard>& keys);
 
-        bool getSubmap(uint16_t idx, uint16_t count, std::vector<std::pair<chess::PackedBoard, Entry*>>& result);
+        /**
+         * @brief Removes a certain number of bytes from the table.
+         * 
+         * @details This is designed to be used internally by the table when an insert would go
+         * above the maximum table size. 
+         * 
+         * @param bytes The number of bytes to remove at minimum
+        */
+       bool removeBytes(size_t bytes);
         
 
         private:
@@ -127,9 +150,28 @@ namespace cinfinity {
              * lower peak memory requirement due to not having to deal with reallocation and frees
              * of memory with the regular map to keep the map contiguous. This means that overall,
              * more entries can be stored due to not requiring to always have half the RAM marked
-             * as overflow. Perhaps this isn't a problem.
+             * as overflow. Perhaps this isn't a problem, or perhaps there are cleverer ways to 
+             * deal with this.
             */
-            ankerl::unordered_dense::segmented_map<chess::PackedBoard, Entry*, Hash> m_table;
+            hashing::segmented_map<chess::PackedBoard, std::unique_ptr<Entry>, Hash> m_table;
+
+            /**
+             * @brief The maximum size in bytes of the table. 
+             * 
+             * @details This should be set to around 75% of the maximum memory you want the engine 
+             * to use. This does not have to be a power of 2. When an insert would increase the 
+             * size of the table beyond this value, any entries with a last_used value less than
+             * current generation (which mostly is the half move) could be removed to make space.
+            */
+            size_t maxSize;
+
+            /**
+             * @brief The value that is used for automatic eviction.
+             * 
+             * @details The removeBytes function will remove any values with a last_used value less
+             * than this value.
+            */
+            uint16_t current_gen = 1;
 
     }; // struct TranspositionTable
 } // namespace cinfinity

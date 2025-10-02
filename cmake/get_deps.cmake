@@ -42,6 +42,29 @@ macro(get_onnxruntime version runtime)
 
 
     add_library(onnxruntime SHARED IMPORTED)
+
+    
+    if (MSVC)
+        find_library(ONNXRUNTIME_IMPLIB
+            NAMES onnxruntime.lib
+            PATHS "${onnxruntime_SOURCE_DIR}/runtimes/${runtime}/native"
+            REQUIRED
+            NO_CACHE
+            NO_DEFAULT_PATH
+            NO_PACKAGE_ROOT_PATH
+            NO_CMAKE_PATH
+            NO_CMAKE_ENVIRONMENT_PATH
+            NO_SYSTEM_ENVIRONMENT_PATH
+            NO_CMAKE_SYSTEM_PATH
+            NO_CMAKE_INSTALL_PREFIX
+            NO_CMAKE_FIND_ROOT_PATH
+        )
+
+        set_target_properties(onnxruntime PROPERTIES
+            IMPORTED_IMPLIB "${ONNXRUNTIME_IMPLIB}"
+        )
+    endif()
+
     set_target_properties(onnxruntime PROPERTIES
         IMPORTED_LOCATION "${ONNXRUNTIME_LIBRARY}"
         INTERFACE_INCLUDE_DIRECTORIES "${ONNXRUNTIME_INCLUDE_DIR}"
@@ -50,7 +73,6 @@ macro(get_onnxruntime version runtime)
     message(STATUS "ONNX Runtime library: ${ONNXRUNTIME_LIBRARY}")
     message(STATUS "ONNX Runtime include dir: ${ONNXRUNTIME_INCLUDE_DIR}")
 endmacro()
-
 
 macro(get_pybind11 version)
     set(PYBIND11_FINDPYTHON NEW)
@@ -80,14 +102,23 @@ macro(get_unordered_dense version)
     endif()
 endmacro()
 
-macro(get_gtest version)
+macro(get_googletest version)
     find_package(GoogleTest QUIET)
     if(NOT ${GoogleTest_FOUND})
-        FetchContent_Declare(gtest
+        FetchContent_Declare(googletest
             GIT_REPOSITORY https://github.com/google/googletest
             GIT_TAG ${version}
         )
 
-        FetchContent_MakeAvailable(gtest)
+        FetchContent_MakeAvailable(googletest)
     endif()
+endmacro()
+
+macro(get_fuzztest version)
+    FetchContent_Declare(fuzztest
+        GIT_REPOSITORY https://github.com/google/fuzztest
+        GIT_TAG ${version}
+    )
+
+    FetchContent_MakeAvailable(fuzztest)
 endmacro()
