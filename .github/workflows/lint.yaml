@@ -27,7 +27,7 @@ jobs:
       - name: Install Conan Dependencies
         run: |
           conan profile detect -f
-          conan install . --build=missing -s build_type=${{ matrix.build-type }} compiler.cppstd=20
+          conan install . --build=missing -s build_type=${{ matrix.build-type }} -s compiler.cppstd=20
 
       - name: Configure CMake
         run: |

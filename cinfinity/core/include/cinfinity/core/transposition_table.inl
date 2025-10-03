@@ -56,16 +56,15 @@ namespace cinfinity::core {
                 Entry* entry = it->second.get();
                 
                 // Only evict old entries
-                if (entry->generation < m_currentGeneration) {
+                if (entry->last_used < m_currentGeneration) {
                     size_t entryBytes = sizeof(*entry) + sizeof(it->second);
                     entryBytes += entry->policy.size() * sizeof(std::pair<uint16_t,float>);
 
                     bytesRemoved += entryBytes;
 
-                    it = bucket->m_data.erase(it);
-                } else {
-                    ++it;
-                }
+                    bucket->m_data.erase(it);
+                } 
+                ++it;
             }
 
             if (bytesRemoved >= bytesToRemove) {
