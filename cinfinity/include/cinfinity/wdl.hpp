@@ -11,6 +11,10 @@ namespace cinfinity {
         std::array<float, 2> _data;
         
         public:
+            inline WDL() {
+                _data = {0.0f, 0.0f};
+            }
+
             inline WDL(float w, float d, float l) {
                 float sum = w + d + l;
                 _data[0] = w / sum;

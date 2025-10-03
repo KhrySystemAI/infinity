@@ -4,7 +4,6 @@ venv/
 .vscode/
 
 .env
-
-cinfinity/include/cinfinity/config.hpp
+CMakeUserPresets.json
 
 *.pyc

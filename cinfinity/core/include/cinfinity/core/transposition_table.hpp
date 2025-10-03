@@ -1,0 +1,47 @@
+#pragma once
+
+#ifndef __INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP__
+#define __INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP__
+
+#include <array>
+#include <memory>
+#include <tuple>
+#include <vector>
+
+#include <absl/container/flat_hash_map.h>
+#include <absl/synchronization/mutex.h>
+
+namespace cinfinity::core {
+    class TranspositionTable {
+        public:
+            struct Entry {
+                absl::flat_hash_map<uint16_t, float> policy;
+                std::array<float, 3> value;
+                size_t visits;
+                uint16_t last_used;
+            }; // struct Entry
+
+            struct Bucket {
+                absl::flat_hash_map<uint64_t, std::unique_ptr<Entry>> m_data;
+                absl::Mutex m_lock;
+            }; // struct Bucket
+
+            TranspositionTable();
+
+            bool batchCreate(std::vector<std::tuple<uint8_t, uint64_t, std::unique_ptr<Entry>>> entries);
+            Entry* read(std::tuple<uint8_t, uint64_t> key);
+            bool batchDelete(std::vector<std::tuple<uint8_t, uint64_t>> keys);
+            bool bytesDelete(size_t bytes);
+
+        private:
+            std::array<std::unique_ptr<Bucket>, 256> m_buckets;
+            uint16_t m_currentGeneration;
+
+    }; // class TranspositionTable
+} // namespace cinfinity::core
+
+#endif // __INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP__
+
+#ifndef CINFINITY_NO_IMPLEMENTATION
+    #include "transposition_table.inl"
+#endif // CINFINITY_NO_IMPLEMENTATION

@@ -2,6 +2,7 @@ from conan import ConanFile
 from conan.tools.cmake import CMake, cmake_layout
 from conan.tools.scm import Git
 
+
 class CinfinityConan(ConanFile):
     name = "cinfinity"
     version = "0.1.0"
@@ -12,39 +13,17 @@ class CinfinityConan(ConanFile):
     generators = "CMakeDeps", "CMakeToolchain"
     exports_sources = "CMakeLists.txt", "src/*", "include/*", "tests/*"
 
-    options = {
-        "with_fuzztest": [True, False]
-    }
-    default_options = {
-        "with_fuzztest": False
-    }
-
     def requirements(self):
-        self.settings.compiler.cppstd = "20"
+        self.settings.compiler.cppstd = "20" # type: ignore
 
         # Dependencies from ConanCenter
-        self.requires("onnxruntime/1.18.1")
-        self.requires("gtest/1.17.0")
-        self.requires("unordered_dense/4.5.0")
-        self.requires("pybind11/3.0.1")
+        self.requires("abseil/20240116.1") # type: ignore
+        self.requires("onnxruntime/1.18.1") # type: ignore
+        self.requires("gtest/1.17.0") # type: ignore
+        self.requires("pybind11/3.0.1") # type: ignore
 
     def source(self):
-        # Git-based dependencies not on ConanCenter
-        git = Git(self)
-        if not self.in_local_cache:
-            # chess-library
-            git.clone("https://github.com/Disservin/chess-library.git", "chess")
-            
-            if self.options.with_fuzztest:
-                # fuzztest
-                git.clone("https://github.com/google/fuzztest.git", "fuzztest")
-                git.folder = "fuzztest"
-                git.checkout("d7e0165fa3b4e06db0cb8570af551e3164e15332")
-
-    def generate(self):
-        tc = CMakeToolchain(self)
-        tc.variables["WITH_FUZZTEST"] = self.options.with_fuzztest
-        tc.generate()
+        pass
 
     def layout(self):
         cmake_layout(self)
