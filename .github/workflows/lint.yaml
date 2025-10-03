@@ -12,9 +12,7 @@ jobs:
   build-and-lint:
     runs-on: ubuntu-latest
     permissions:
-      metadata: read
       contents: write
-      pull_requests: write
 
 
 
@@ -32,10 +30,6 @@ jobs:
           files-changed-only: false
           ignore: '|!cinfinity/**'
           thread-comments: 'true'
-          no-lgtm: false
-          step-summary: true
-          tidy-review: true
-          format-review: true
           cache-enable: true
           
       - name: Fail fast?!
