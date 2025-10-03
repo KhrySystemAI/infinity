@@ -17,12 +17,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake clang clang-tidy python3-pip clang-tools build-essential git
-          pip3 install cpplint conan
+      - uses: actions/setup-python@v5
+        with: 
+          cache: 'pip'
+      - uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: x64
+      - shell: bash
+        run: echo "PKG_CONFIG_PATH=" >> $GITHUB_ENV
+      - uses: conan-io/setup-conan@v1.2.0
+        with:
+          cache_packages: true
+      - uses: jwlawson/setup-cmake-action@v2
 
       - name: Install Conan Dependencies
         run: |
