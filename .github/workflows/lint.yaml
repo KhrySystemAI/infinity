@@ -11,9 +11,12 @@ on:
 jobs:
   build-and-lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        build-type: [Debug]
+    permissions:
+      metadata: read
+      contents: write
+      pull_requests: write
+
+
 
     steps:
       - uses: actions/checkout@v3
@@ -21,13 +24,20 @@ jobs:
         with:
           cache_packages: true
 
-      - name: Install Conan Dependencies
-        run: |
-          conan profile detect -f
-          conan install . --build=missing -s build_type=${{ matrix.build-type }} -s compiler.cppstd=20
-
-      - name: Configure CMake
-        run: |
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} .. "-DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-3.9;--config-file=../.clang-tidy"
+      - uses: cpp-linter/cpp-linter-action@v2.16.4
+        with:
+          style: 'file'
+          clang-tidy: '' # Use .clang-tidy file
+          version: 21
+          files-changed-only: false
+          ignore: '|!cinfinity/**'
+          thread-comments: 'true'
+          no-lgtm: false
+          step-summary: true
+          tidy-review: true
+          format-review: true
+          cache-enable: true
+          
+      - name: Fail fast?!
+        if: steps.linter.outputs.checks-failed > 0
+        run: exit 1
