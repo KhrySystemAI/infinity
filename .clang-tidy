@@ -1,0 +1,11 @@
+Checks: >
+    bugprone-*,
+    clang-analyzer-*,
+    concurrency-*,
+    cppcoreguidelines-*,
+    google-*,
+    modernize-*,
+    performance-*,
+    readability-*,
+    abseil-*,
+    misc-*

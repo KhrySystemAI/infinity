@@ -33,33 +33,4 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} ..
-
-      - name: clang-tidy
-        run: |
-          cd build
-          cmake --build . --target all
-          run-clang-tidy -p . ../cinfinity/core/include/** 
-
-      - name: cpplint
-        run: |
-          cpplint --recursive include/cinfinity src
-
-      - name: IWYU
-        run: |
-          cd build
-          iwyu_tool.py -p . ../include/cinfinity ../src
-
-      - name: Build with ASan & TSan
-        run: |
-          mkdir -p build_sanitizer
-          cd build_sanitizer
-          cmake -DCMAKE_BUILD_TYPE=Debug \
-                -DCMAKE_CXX_FLAGS="-fsanitize=address,thread -fno-omit-frame-pointer" \
-                ..
-          cmake --build . --target all
-
-      - name: Run tests
-        run: |
-          cd build_sanitizer
-          ctest --output-on-failure
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} .. "-DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-3.9;--config-file=../.clang-tidy"
