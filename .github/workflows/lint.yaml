@@ -3,10 +3,10 @@ name: C++ Lint & Sanitizer
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-lint:
@@ -16,49 +16,41 @@ jobs:
         build-type: [Debug]
 
     steps:
-      # 1. Checkout code
       - uses: actions/checkout@v3
 
-      # 2. Install system dependencies
       - name: Install Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake clang clang-tidy python3-pip clang-tools build-essential git
           pip3 install cpplint conan
 
-      # 3. Configure Conan
       - name: Install Conan Dependencies
         run: |
           conan profile new default --detect --force
           conan profile update settings.compiler.libcxx=libstdc++11 default
           conan install . --build=missing -s build_type=${{ matrix.build-type }}
 
-      # 4. Configure CMake
       - name: Configure CMake
         run: |
           mkdir build
           cd build
           cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} ..
 
-      # 5. Run clang-tidy
       - name: clang-tidy
         run: |
           cd build
           cmake --build . --target all
           run-clang-tidy -p . ../cinfinity/core/include/** 
 
-      # 6. Run cpplint
       - name: cpplint
         run: |
           cpplint --recursive include/cinfinity src
 
-      # 7. Include-What-You-Use
       - name: IWYU
         run: |
           cd build
           iwyu_tool.py -p . ../include/cinfinity ../src
 
-      # 8. Build with sanitizers enabled
       - name: Build with ASan & TSan
         run: |
           mkdir -p build_sanitizer
@@ -68,7 +60,6 @@ jobs:
                 ..
           cmake --build . --target all
 
-      # 9. Run tests with sanitizers
       - name: Run tests
         run: |
           cd build_sanitizer
