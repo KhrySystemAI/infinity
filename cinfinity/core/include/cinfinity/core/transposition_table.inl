@@ -43,7 +43,7 @@ namespace cinfinity::core {
 
     }
 
-    bool TranspositionTable::bytesRemove(size_t bytesToRemove) {
+    bool TranspositionTable::bytesDelete(size_t bytesToRemove) {
         size_t bytesRemoved = 0;
 
         for (std::size_t i = 0; i < m_buckets.size(); ++i) {

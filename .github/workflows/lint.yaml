@@ -26,9 +26,8 @@ jobs:
 
       - name: Install Conan Dependencies
         run: |
-          conan profile new default --detect --force
-          conan profile update settings.compiler.libcxx=libstdc++11 default
-          conan install . --build=missing -s build_type=${{ matrix.build-type }}
+          conan profile detect -f
+          conan install . --build=missing -s build_type=${{ matrix.build-type }} compiler.cppstd=20
 
       - name: Configure CMake
         run: |
