@@ -19,16 +19,14 @@ namespace cinfinity::core {
         public:
             struct Entry {
                 public:
+                    friend class TranspositionTable; 
+                    
                     Entry(absl::flat_hash_map<uint16_t, float> policy, WDL value, uint16_t lastUsed);
 
                     [[nodiscard]] float getPolicy(uint16_t move) const noexcept;
                     [[nodiscard]] WDL getValue() const noexcept;
-
                     [[nodiscard]] size_t getVisits() const noexcept;
-                    void setVisits(size_t visits) const noexcept;
-
                     [[nodiscard]] uint16_t getLastUsed() const noexcept;
-                    void setLastUsed(uint16_t lastUsed) const noexcept;
 
                     [[nodiscard]] size_t size() const noexcept;
 

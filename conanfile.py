@@ -1,5 +1,5 @@
 from conan import ConanFile
-from conan.tools.cmake import CMake, cmake_layout
+from conan.tools.cmake import CMake, cmake_layout, CMakeToolchain
 from conan.tools.scm import Git
 
 
@@ -12,6 +12,22 @@ class CinfinityConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps", "CMakeToolchain"
     exports_sources = "CMakeLists.txt", "src/*", "include/*", "tests/*"
+    
+    options =  {
+        "build_tests": [True, False],
+        "build_fuzzing": [True, False],
+        "export_compile_commands": [True, False]
+    }
+    
+    default_options = {
+        "build_tests": True,
+        "build_fuzzing": False,
+        "export_compile_commands": False
+    }
+    
+    def config_options(self):
+        if self.settings.compiler == "msvc":
+            self.options.rm_safe("rm_fuzzing")
 
     def requirements(self):
         self.settings.compiler.cppstd = "20" # type: ignore
@@ -24,6 +40,15 @@ class CinfinityConan(ConanFile):
 
     def source(self):
         pass
+    
+    def generate(self):
+        tc = CMakeToolchain(self)
+        if self.options.build_tests:
+            tc.variables["CINFINITY_BUILD_TESTS"] = True
+        if self.options.build_fuzzing:
+            tc.variables["CINFINITY_BUILD_FUZZING"] = True
+        if self.options.export_compile_commands:
+            tc.variables["CMAKE_EXPORT_COMPILE_COMMANDS"] = True
 
     def layout(self):
         cmake_layout(self)

@@ -4,6 +4,23 @@
 #include "transposition_table.hpp"
 
 namespace cinfinity::core {
+    float TranspositionTable::Entry::getPolicy(uint16_t move) const noexcept {
+        auto it = m_policy.find(move);
+        return (it != m_policy.end()) ? it->second : -1.0f;
+    }
+
+    WDL TranspositionTable::Entry::getValue() const noexcept {
+        return m_value;
+    }
+
+    size_t TranspositionTable::Entry::getVisits() const noexcept {
+        return m_visits;
+    }
+
+    uint16_t TranspositionTable::Entry::getLastUsed() const noexcept {
+        return m_lastUsed;
+    }
+
     size_t TranspositionTable::Entry::size() const noexcept {
         return sizeof(uint16_t) + 
             sizeof(size_t) + 
@@ -48,7 +65,13 @@ namespace cinfinity::core {
         auto& [bucket_id, hash] = key;
         auto& bucket = m_buckets[bucket_id];
         absl::ReaderMutexLock lock(&bucket->m_lock);
-        return bucket->m_data.contains(hash) ? bucket->m_data[hash].get() : nullptr;
+        if(bucket->m_data.contains(hash)) {
+            auto ptr = bucket->m_data[hash].get();
+            ptr->m_visits++;
+            ptr->m_lastUsed = m_currentGeneration;
+            return ptr;
+        }
+        return nullptr;
     }
 
     bool TranspositionTable::batchDelete(std::vector<std::tuple<uint8_t, uint64_t>> keys) {
