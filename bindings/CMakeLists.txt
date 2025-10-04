@@ -7,3 +7,5 @@ add_library(cinfinity_bindings_cxx SHARED
 target_link_libraries(cinfinity_bindings_cxx PRIVATE
     cinfinity::core
 )
+
+add_library(cinfinity::bindings::cxx ALIAS cinfinity_bindings_cxx)

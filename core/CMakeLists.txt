@@ -7,10 +7,6 @@ add_library(cinfinity_core INTERFACE
     include/cinfinity/core/transposition_table.inl
 )
 
-target_precompile_headers(cinfinity_core INTERFACE 
-    include/cinfinity/core/transposition_table.hpp
-)
-
 target_include_directories(cinfinity_core INTERFACE 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
