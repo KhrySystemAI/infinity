@@ -1,9 +1,9 @@
-#ifndef INCLUDE_CINFINITY_CORE_WDL_HPP
-#define INCLUDE_CINFINITY_CORE_WDL_HPP
+#ifndef INCLUDE_CINFINITY_MEMORY_WDL_HPP
+#define INCLUDE_CINFINITY_MEMORY_WDL_HPP
 
 #include <array>
 
-namespace cinfinity::core {
+namespace cinfinity::memory {
 class WDL {
  public:
   WDL(float win, float draw, float loss);
@@ -16,9 +16,9 @@ class WDL {
  private:
   std::array<float, 2> m_data;
 };
-}  // namespace cinfinity::core
+}  // namespace cinfinity::memory
 
-#endif  // INCLUDE_CINFINITY_CORE_WDL_HPP
+#endif  // INCLUDE_CINFINITY_MEMORY_WDL_HPP
 
 #ifndef CINFINITY_NO_IMPLEMENTATION
 // NOLINTNEXTLINE(misc-include-cleaner)

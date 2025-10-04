@@ -1,9 +1,9 @@
-#ifndef INCLUDE_CINFINITY_CORE_WDL_INL
-#define INCLUDE_CINFINITY_CORE_WDL_INL
+#ifndef INCLUDE_CINFINITY_MEMORY_WDL_INL
+#define INCLUDE_CINFINITY_MEMORY_WDL_INL
 
 #include "wdl.hpp"
 
-namespace cinfinity::core {
+namespace cinfinity::memory {
 WDL::WDL(float w, float d, float l) {
   float total = w + d + l;
   if (total < 1e-6) {
@@ -28,6 +28,6 @@ float WDL::lossChance() const noexcept {
 WDL WDL::invert() const noexcept {
   return {m_data[1], drawChance(), m_data[0]};
 }
-}  // namespace cinfinity::core
+}  // namespace cinfinity::memory
 
-#endif  // INCLUDE_CINFINITY_CORE_WDL_INL
+#endif  // INCLUDE_CINFINITY_MEMORY_WDL_INL

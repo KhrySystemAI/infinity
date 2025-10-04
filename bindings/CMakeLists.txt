@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.30)
 
-add_library(cinfinity_bindings_cxx SHARED
+add_library(cinfinity_bindings_cxx STATIC
     cinfinity_cxx_bindings.cpp
 )
 

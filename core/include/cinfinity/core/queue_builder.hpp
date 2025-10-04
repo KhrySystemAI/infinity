@@ -43,17 +43,17 @@
 
 #include <memory>
 
-#include "transposition_table.hpp"
+#include "cinfinity/memory/transposition_table.hpp"
 
 namespace cinfinity::core {
 class QueueBuilder {
  public:
-  explicit QueueBuilder(std::shared_ptr<TranspositionTable> transpositionTable);
+  explicit QueueBuilder(std::shared_ptr<memory::TranspositionTable> transpositionTable);
 
   void run();
 
  private:
-  std::shared_ptr<TranspositionTable> m_transpositionTable;
+  std::shared_ptr<memory::TranspositionTable> m_transpositionTable;
   // std::vector<std::shared_ptr<ModelHandler>> m_modelHandlers;
 
 };  // class QueueBuilder

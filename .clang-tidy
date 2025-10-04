@@ -8,5 +8,4 @@ Checks: >
     performance-*,
     readability-*,
     abseil-*,
-    misc-*,
-    -misc-header-include-cycle
+    misc-*

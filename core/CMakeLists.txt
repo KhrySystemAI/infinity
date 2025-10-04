@@ -1,20 +1,24 @@
 cmake_minimum_required(VERSION 3.30)
 
-find_package(absl REQUIRED CONFIG)
+set(_cinfinity_core_hpp 
+    include/cinfinity/core/queue_builder.hpp
+)
 
 add_library(cinfinity_core INTERFACE
-    include/cinfinity/core/transposition_table.hpp
-    include/cinfinity/core/transposition_table.inl
+    ${_cinfinity_core_hpp}
+)
+
+target_precompile_headers(cinfinity_core INTERFACE
+    ${_cinfinity_core_hpp}
 )
 
 target_include_directories(cinfinity_core INTERFACE 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(cinfinity_core INTERFACE 
-    absl::flat_hash_map
-    absl::random_random
-    absl::synchronization
+target_link_libraries(cinfinity_core INTERFACE
+    cinfinity::memory
+    cinfinity::chess
 )
 
 add_library(cinfinity::core ALIAS cinfinity_core)

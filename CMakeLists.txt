@@ -18,19 +18,24 @@ project(Infinity
 )
 
 if(${WIN32})
-    set(INFINITY_COMPILE_FUZZING CACHE BOOL OFF)
+    set(INFINITY_COMPILE_FUZZING CACHE BOOL OFF FORCE)
     mark_as_advanced(INFINITY_COMPILE_FUZZING)
 else()
     option(INFINITY_COMPILE_FUZZING "" ${PROJECT_IS_TOP_LEVEL})
 endif() 
 
 if(${INFINITY_COMPILE_FUZZING})
-    set(INFINITY_COMPILE_TESTS CACHE BOOL ON)
+    set(INFINITY_COMPILE_TESTS CACHE BOOL ON FORCE)
     mark_as_advanced(INFINITY_COMPILE_FUZZING)
 else()
     option(INFINITY_COMPILE_TESTS "" ${PROJECT_IS_TOP_LEVEL})
 endif()
 
-add_subdirectory(core)
-add_subdirectory(nn)
+option(INFINITY_BUILD_DOCS "" ${PROJECT_IS_TOP_LEVEL})
+
 add_subdirectory(bindings)
+add_subdirectory(chess)
+add_subdirectory(core)
+add_subdirectory(docs)
+add_subdirectory(memory)
+add_subdirectory(nn)

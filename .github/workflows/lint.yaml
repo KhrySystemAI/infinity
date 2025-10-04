@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         run: |
-          conan build . -s compiler.cppstd=20 -o export_compile_commands=True
+          conan build . -s %:compiler.cppstd=20 -o export_compile_commands=True -o build_tests=True -o build_fuzzing=True
 
       - uses: cpp-linter/cpp-linter-action@v2.16.4
         env:
@@ -37,7 +37,7 @@ jobs:
           extensions: 'cpp,hpp,inl'
           tidy-checks: '' # Use .clang-tidy file
           version: 21
-          ignore: '|!bindings/**|core/**|nn/**'
+          ignore: '|!bindings/**|!chess/**|!core/**|!memory/**|!nn/**'
           thread-comments: update
           files-changed-only: false
           no-lgtm: false

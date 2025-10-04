@@ -34,10 +34,11 @@
  * @copyright (c) 2025 The Infinity Chess Engine Project
  * @license SPDX-License-Identifier: GPL-3.0-only
  */
-#ifndef INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP
-#define INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP
+#ifndef INCLUDE_CINFINITY_MEMORY_TRANSPOSITION_TABLE_HPP
+#define INCLUDE_CINFINITY_MEMORY_TRANSPOSITION_TABLE_HPP
 
 #include <absl/container/flat_hash_map.h>
+#include <absl/container/btree_map.h>
 #include <absl/random/random.h>
 #include <absl/synchronization/mutex.h>
 
@@ -47,14 +48,14 @@
 
 #include "wdl.hpp"
 
-namespace cinfinity::core {
+namespace cinfinity::memory {
 class TranspositionTable {
  public:
   struct Entry {
    public:
     friend class TranspositionTable;
 
-    Entry(absl::flat_hash_map<uint16_t, float> policy, WDL value,
+    Entry(absl::btree_map<uint16_t, float> policy, WDL value,
           uint16_t lastUsed);
 
     [[nodiscard]] auto getPolicy(uint16_t move) const noexcept -> float;
@@ -94,9 +95,9 @@ class TranspositionTable {
   absl::BitGen m_bitgen{};
 
 };  // class TranspositionTable
-}  // namespace cinfinity::core
+}  // namespace cinfinity::memory
 
-#endif  // INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP
+#endif  // INCLUDE_CINFINITY_MEMORY_TRANSPOSITION_TABLE_HPP
 
 #ifndef CINFINITY_NO_IMPLEMENTATION
 // NOLINTNEXTLINE(misc-include-cleaner)

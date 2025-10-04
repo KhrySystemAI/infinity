@@ -1,9 +1,10 @@
-#ifndef INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_INL
-#define INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_INL
+#ifndef INCLUDE_CINFINITY_MEMORY_TRANSPOSITION_TABLE_INL
+#define INCLUDE_CINFINITY_MEMORY_TRANSPOSITION_TABLE_INL
 
+// NOLINTNEXTLINE(misc-header-include-cycle)
 #include "transposition_table.hpp"
 
-namespace cinfinity::core {
+namespace cinfinity::memory {
 float TranspositionTable::Entry::getPolicy(uint16_t move) const noexcept {
   auto it = m_policy.find(move);
   return (it != m_policy.end()) ? it->second : -1.0f;
@@ -133,6 +134,6 @@ bool TranspositionTable::bytesDelete(size_t bytesToRemove) {
 
   return false;
 }
-}  // namespace cinfinity::core
+}  // namespace cinfinity::memory
 
-#endif  // INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_INL
+#endif  // INCLUDE_CINFINITY_MEMORY_TRANSPOSITION_TABLE_INL
