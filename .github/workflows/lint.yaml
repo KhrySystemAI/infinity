@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         run: |
-          conan build .
+          conan build . -s compiler.cppstd=20
 
       - name: Export Compile Commands
         run: |
