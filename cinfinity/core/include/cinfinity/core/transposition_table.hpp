@@ -21,16 +21,16 @@ namespace cinfinity::core {
                 public:
                     Entry(absl::flat_hash_map<uint16_t, float> policy, WDL value, uint16_t lastUsed);
 
-                    _NODISCARD float getPolicy(uint16_t move) const noexcept;
-                    _NODISCARD WDL getValue() const noexcept;
+                    [[nodiscard]] float getPolicy(uint16_t move) const noexcept;
+                    [[nodiscard]] WDL getValue() const noexcept;
 
-                    _NODISCARD size_t getVisits() const noexcept;
+                    [[nodiscard]] size_t getVisits() const noexcept;
                     void setVisits(size_t visits) const noexcept;
 
-                    _NODISCARD uint16_t getLastUsed() const noexcept;
+                    [[nodiscard]] uint16_t getLastUsed() const noexcept;
                     void setLastUsed(uint16_t lastUsed) const noexcept;
 
-                    _NODISCARD size_t size() const noexcept;
+                    [[nodiscard]] size_t size() const noexcept;
 
                 private:
                     absl::flat_hash_map<uint16_t, float> m_policy;
@@ -50,7 +50,7 @@ namespace cinfinity::core {
             TranspositionTable();
 
             bool batchCreate(std::vector<std::tuple<uint8_t, uint64_t, std::unique_ptr<Entry>>> entries);
-            _NODISCARD Entry* read(std::tuple<uint8_t, uint64_t> key);
+            [[nodiscard]] Entry* read(std::tuple<uint8_t, uint64_t> key);
             bool batchDelete(std::vector<std::tuple<uint8_t, uint64_t>> keys);
             bool bytesDelete(size_t bytes);
 

@@ -8,10 +8,10 @@ namespace cinfinity::core {
         public:
             WDL(float w, float d, float l);
 
-            _NODISCARD float winChance() const noexcept;
-            _NODISCARD float drawChance() const noexcept;
-            _NODISCARD float lossChance() const noexcept;
-            _NODISCARD WDL invert() const noexcept;
+            [[nodiscard]] float winChance() const noexcept;
+            [[nodiscard]] float drawChance() const noexcept;
+            [[nodiscard]] float lossChance() const noexcept;
+            [[nodiscard]] WDL invert() const noexcept;
 
         private:
             std::array<float, 2> m_data;

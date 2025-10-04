@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  build-and-lint:
+  cpp-linter:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -23,8 +23,12 @@ jobs:
 
       - name: Install Conan Dependencies
         run: |
-          conan profile detect -f
           conan install . --build=missing -s compiler.cppstd=20
+
+      - name: Configure CMake
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - uses: cpp-linter/cpp-linter-action@v2.16.4
         with:
@@ -35,3 +39,4 @@ jobs:
           ignore: '|!cinfinity/**'
           files-changed-only: false
           cache-enable: true
+          database: build

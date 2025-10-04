@@ -1,7 +1,5 @@
-#pragma once
-
-#ifndef __INCLUDE_CINFINITY_NN_MODEL_HPP__
-#define __INCLUDE_CINFINITY_NN_MODEL_HPP__
+#ifndef INCLUDE_CINFINITY_NN_MODEL_HPP
+#define INCLUDE_CINFINITY_NN_MODEL_HPP
 
 #include <thread>
 #include <onnxruntime_cxx_api.h>
@@ -16,4 +14,4 @@ namespace cinfinity::nn {
     };
 }
 
-#endif // __INCLUDE_CINFINITY_NN_MODEL_HPP__
+#endif // INCLUDE_CINFINITY_NN_MODEL_HPP
