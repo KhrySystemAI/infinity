@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  cpp-linter:
+  build-latest:
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -27,13 +27,15 @@ class CinfinityConan(ConanFile):
         "export_compile_commands": False,
     }
     
+    force_build_tests: bool = False
+    
     def config_options(self):
         if self.settings.compiler == "msvc": # type: ignore
             self.options.rm_safe("build_fuzzing") # type: ignore
             
     def configure(self):
         if self.options.get_safe("build_fuzzing", False): # type: ignore
-            self.options["build_tests"] = True # type: ignore
+            self.force_build_tests = True
 
     def requirements(self):
         self.settings.compiler.cppstd = "20" # type: ignore
@@ -42,7 +44,7 @@ class CinfinityConan(ConanFile):
         self.requires("onnxruntime/1.18.1") # type: ignore
         self.requires("pybind11/3.0.1") # type: ignore
         
-        if self.options.get_safe("build_docs", False): # type: ignore
+        if self.force_build_tests or self.options.get_safe("build_docs", False): # type: ignore
             self.requires("gtest/1.17.0") # type: ignore
             
         if self.options.get_safe("build_docs", False): # type: ignore
