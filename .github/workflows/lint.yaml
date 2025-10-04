@@ -26,11 +26,11 @@ jobs:
           conan install . --build=missing -s compiler.cppstd=20
 
       - name: Build
-      - run: |
+        run: |
           conan build .
 
       - name: Export Compile Commands
-      - run: |
+        run: |
           cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - uses: cpp-linter/cpp-linter-action@v2.16.4
