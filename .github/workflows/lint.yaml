@@ -25,9 +25,13 @@ jobs:
         run: |
           conan install . --build=missing -s compiler.cppstd=20
 
-      - name: Configure CMake
-        run: |
-          cmake -S . -B build -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_TOOLCHAIN_FILE=generators/conan_toolchain.cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -G "Unix Makefiles"
+      - name: Build
+      - run: |
+          conan build .
+
+      - name: Export Compile Commands
+      - run: |
+          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - uses: cpp-linter/cpp-linter-action@v2.16.4
         with:
