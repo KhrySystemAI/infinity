@@ -1,3 +1,7 @@
+/**
+ * @copyright (c) 2025 The Infinity Chess Engine Project. 
+ * This project is released under the GNU GPLv3 License.
+ */
 #ifndef INCLUDE_CINFINITY_CORE_QUEUE_BUILDER_HPP
 #define INCLUDE_CINFINITY_CORE_QUEUE_BUILDER_HPP
 
