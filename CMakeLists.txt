@@ -12,6 +12,9 @@ string(REGEX REPLACE "-.*$" "" PROJECT_VERSION "${PROJECT_VERSION_FULL}")
 
 project(Infinity 
     VERSION ${PROJECT_VERSION}
+    DESCRIPTION "A C++20 transformer chess bot."
+    HOMEPAGE_URL "https://github.com/KhrySystemAI/Infinity" 
+    LANGUAGES CXX
 )
 
 if(${WIN32})
@@ -28,4 +31,6 @@ else()
     option(INFINITY_COMPILE_TESTS "" ${PROJECT_IS_TOP_LEVEL})
 endif()
 
-add_subdirectory(cinfinity)
+add_subdirectory(core)
+add_subdirectory(nn)
+add_subdirectory(bindings)

@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "infinity-training"
-description = "Training script for the CInfinity chess engine."
+description = "Training scripts for the Infinity chess engine."
 authors = [{ name = "Michael Piccirillo"}]
 readme = "README.md"
 license = { file = "../LICENSE" }

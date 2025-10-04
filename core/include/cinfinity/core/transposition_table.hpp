@@ -41,12 +41,9 @@
 #include <absl/random/random.h>
 #include <absl/synchronization/mutex.h>
 
-#include <array>
 #include <cstddef>
-#include <cstdint>
 #include <memory>
 #include <tuple>
-#include <vector>
 
 #include "wdl.hpp"
 

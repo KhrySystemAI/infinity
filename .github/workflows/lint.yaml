@@ -37,7 +37,7 @@ jobs:
           extensions: 'cpp,hpp,inl'
           tidy-checks: '' # Use .clang-tidy file
           version: 21
-          ignore: '|!cinfinity/**'
+          ignore: '|!bindings/**|core/**|nn/**'
           thread-comments: update
           files-changed-only: false
           no-lgtm: false
