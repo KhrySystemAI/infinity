@@ -4,22 +4,22 @@
 #include <array>
 
 namespace cinfinity::core {
-    class WDL {
-        public:
-            WDL(float w, float d, float l);
+class WDL {
+ public:
+  WDL(float win, float draw, float loss);
 
-            [[nodiscard]] float winChance() const noexcept;
-            [[nodiscard]] float drawChance() const noexcept;
-            [[nodiscard]] float lossChance() const noexcept;
-            [[nodiscard]] WDL invert() const noexcept;
+  [[nodiscard]] auto winChance() const noexcept -> float;
+  [[nodiscard]] auto drawChance() const noexcept -> float;
+  [[nodiscard]] auto lossChance() const noexcept -> float;
+  [[nodiscard]] auto invert() const noexcept -> WDL;
 
-        private:
-            std::array<float, 2> m_data;
-    };
-} // namespace cinfinity::core
+ private:
+  std::array<float, 2> m_data;
+};
+}  // namespace cinfinity::core
 
-#endif // INCLUDE_CINFINITY_CORE_WDL_HPP
+#endif  // INCLUDE_CINFINITY_CORE_WDL_HPP
 
 #ifndef CINFINITY_NO_IMPLEMENTATION
-    #include "wdl.inl"
+#include "wdl.inl"
 #endif

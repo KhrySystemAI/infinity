@@ -1,5 +1,5 @@
 /**
- * @copyright (c) 2025 The Infinity Chess Engine Project. 
+ * @copyright (c) 2025 The Infinity Chess Engine Project.
  * This project is released under the GNU GPLv3 License.
  */
 #ifndef INCLUDE_CINFINITY_CORE_QUEUE_BUILDER_HPP
@@ -10,17 +10,17 @@
 #include "transposition_table.hpp"
 
 namespace cinfinity::core {
-    class QueueBuilder {
-        public:
-            QueueBuilder(std::shared_ptr<TranspositionTable> transpositionTable);
+class QueueBuilder {
+ public:
+  explicit QueueBuilder(std::shared_ptr<TranspositionTable> transpositionTable);
 
-            void run();
-        private:
-            std::shared_ptr<TranspositionTable> m_transpositionTable;
-            // std::vector<std::shared_ptr<ModelHandler>> m_modelHandlers;
+  void run();
 
+ private:
+  std::shared_ptr<TranspositionTable> m_transpositionTable;
+  // std::vector<std::shared_ptr<ModelHandler>> m_modelHandlers;
 
-    }; // class QueueBuilder
-} // namespace cinfinity::core
+};  // class QueueBuilder
+}  // namespace cinfinity::core
 
-#endif // INCLUDE_CINFINITY_CORE_QUEUE_BUILDER_HPP
+#endif  // INCLUDE_CINFINITY_CORE_QUEUE_BUILDER_HPP

@@ -34,7 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           style: 'file'
-          extensions: 'c,h,cpp,hpp,inl'
+          extensions: 'cpp,hpp,inl'
           tidy-checks: '' # Use .clang-tidy file
           version: 21
           ignore: '|!cinfinity/**'
