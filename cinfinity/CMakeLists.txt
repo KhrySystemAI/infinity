@@ -11,11 +11,4 @@ project(CInfinity
     LANGUAGES CXX
 )
 
-configure_file(
-    include/cinfinity/config.hpp.in
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/cinfinity/config.hpp
-    @ONLY
-)
-
 add_subdirectory(core)
-add_subdirectory(tests)

@@ -32,11 +32,4 @@ else()
     option(INFINITY_COMPILE_TESTS "" ${PROJECT_IS_TOP_LEVEL})
 endif()
 
-include(cmake/get_deps.cmake)
-
-get_chess()
-
-find_package(onnxruntime REQUIRED CONFIG)
-find_package(pybind11 REQUIRED CONFIG)
-
 add_subdirectory(cinfinity)

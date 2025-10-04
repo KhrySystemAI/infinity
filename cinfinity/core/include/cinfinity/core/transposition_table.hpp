@@ -10,6 +10,7 @@
 
 #include <absl/container/flat_hash_map.h>
 #include <absl/synchronization/mutex.h>
+#include <absl/random/random.h>
 
 namespace cinfinity::core {
     class TranspositionTable {
@@ -19,6 +20,8 @@ namespace cinfinity::core {
                 std::array<float, 3> value;
                 size_t visits;
                 uint16_t last_used;
+
+                size_t size() const noexcept;
             }; // struct Entry
 
             struct Bucket {
@@ -36,6 +39,7 @@ namespace cinfinity::core {
         private:
             std::array<std::unique_ptr<Bucket>, 256> m_buckets;
             uint16_t m_currentGeneration;
+            absl::BitGen m_bitgen;
 
     }; // class TranspositionTable
 } // namespace cinfinity::core
