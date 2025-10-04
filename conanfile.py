@@ -10,7 +10,7 @@ class CinfinityConan(ConanFile):
     url = "https://github.com/yourorg/cinfinity"
     description = "MCTS/Chess project with ONNXRuntime, fuzzing, and bindings"
     settings = "os", "compiler", "build_type", "arch"
-    generators = "CMakeDeps", "CMakeToolchain"
+    generators = "CMakeDeps"
     exports_sources = "CMakeLists.txt", "src/*", "include/*", "tests/*"
     
     options =  {
@@ -40,18 +40,16 @@ class CinfinityConan(ConanFile):
 
     def source(self):
         pass
-    
-    def generate(self):
-        tc = CMakeToolchain(self)
-        if self.options.build_tests:
-            tc.variables["CINFINITY_BUILD_TESTS"] = True
-        if self.options.build_fuzzing:
-            tc.variables["CINFINITY_BUILD_FUZZING"] = True
-        if self.options.export_compile_commands:
-            tc.variables["CMAKE_EXPORT_COMPILE_COMMANDS"] = True
 
     def layout(self):
         cmake_layout(self)
+
+    def generate(self):
+        tc = CMakeToolchain(self)
+        tc.variables["CINFINITY_BUILD_TESTS"] = bool(self.options.build_tests)
+        tc.variables["CINFINITY_BUILD_FUZZING"] = bool(self.options.build_fuzzing)
+        tc.variables["CMAKE_EXPORT_COMPILE_COMMANDS"] = bool(self.options.export_compile_commands)
+        tc.generate()
 
     def build(self):
         cmake = CMake(self)
