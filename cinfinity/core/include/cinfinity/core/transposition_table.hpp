@@ -1,9 +1,9 @@
-#pragma once
-
-#ifndef __INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP__
-#define __INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP__
+#ifndef INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP
+#define INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP
 
 #include <array>
+#include <cstdint>
+#include <cstddef>
 #include <memory>
 #include <tuple>
 #include <vector>
@@ -21,7 +21,7 @@ namespace cinfinity::core {
                 size_t visits;
                 uint16_t last_used;
 
-                size_t size() const noexcept;
+                _NODISCARD size_t size() const noexcept;
             }; // struct Entry
 
             struct Bucket {
@@ -32,7 +32,7 @@ namespace cinfinity::core {
             TranspositionTable();
 
             bool batchCreate(std::vector<std::tuple<uint8_t, uint64_t, std::unique_ptr<Entry>>> entries);
-            Entry* read(std::tuple<uint8_t, uint64_t> key);
+            _NODISCARD Entry* read(std::tuple<uint8_t, uint64_t> key);
             bool batchDelete(std::vector<std::tuple<uint8_t, uint64_t>> keys);
             bool bytesDelete(size_t bytes);
 
@@ -44,7 +44,7 @@ namespace cinfinity::core {
     }; // class TranspositionTable
 } // namespace cinfinity::core
 
-#endif // __INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP__
+#endif // INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP
 
 #ifndef CINFINITY_NO_IMPLEMENTATION
     #include "transposition_table.inl"
