@@ -1,0 +1,34 @@
+name: Linux Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  cpp-linter:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: conan-io/setup-conan@v1.2.0
+        with:
+          cache_packages: true
+
+      - name: Install Conan Dependencies
+        run: |
+          conan install . --build=missing -s compiler.cppstd=20
+
+      - name: Build
+        run: |
+          conan build . -s compiler.cppstd=20 -o &:export_compile_commands=True -o &:build_tests=True &:build_fuzzing=True
+
+      - name: Test
+        run: |
+          ctest .

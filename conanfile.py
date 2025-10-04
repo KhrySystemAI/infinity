@@ -11,7 +11,7 @@ class CinfinityConan(ConanFile):
     description = "MCTS/Chess project with ONNXRuntime, fuzzing, and bindings"
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps"
-    exports_sources = "CMakeLists.txt", "src/*", "include/*", "tests/*"
+    exports_sources = "CMakeLists.txt", "bindings/**", "core/**", "nn/**"
     
     options =  {
         "build_tests": [True, False],
@@ -27,7 +27,7 @@ class CinfinityConan(ConanFile):
     
     def config_options(self):
         if self.settings.compiler == "msvc":
-            self.options.rm_safe("rm_fuzzing")
+            self.options.rm_safe("build_fuzzing")
 
     def requirements(self):
         self.settings.compiler.cppstd = "20" # type: ignore
