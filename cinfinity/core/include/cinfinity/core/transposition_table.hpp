@@ -12,16 +12,31 @@
 #include <absl/synchronization/mutex.h>
 #include <absl/random/random.h>
 
+#include "wdl.hpp"
+
 namespace cinfinity::core {
     class TranspositionTable {
         public:
             struct Entry {
-                absl::flat_hash_map<uint16_t, float> policy;
-                std::array<float, 3> value;
-                size_t visits;
-                uint16_t last_used;
+                public:
+                    Entry(absl::flat_hash_map<uint16_t, float> policy, WDL value, uint16_t lastUsed);
 
-                _NODISCARD size_t size() const noexcept;
+                    _NODISCARD float getPolicy(uint16_t move) const noexcept;
+                    _NODISCARD WDL getValue() const noexcept;
+
+                    _NODISCARD size_t getVisits() const noexcept;
+                    void setVisits(size_t visits) const noexcept;
+
+                    _NODISCARD uint16_t getLastUsed() const noexcept;
+                    void setLastUsed(uint16_t lastUsed) const noexcept;
+
+                    _NODISCARD size_t size() const noexcept;
+
+                private:
+                    absl::flat_hash_map<uint16_t, float> m_policy;
+                    WDL m_value;
+                    size_t m_visits;
+                    uint16_t m_lastUsed;
             }; // struct Entry
 
             struct Bucket {

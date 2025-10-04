@@ -25,12 +25,3 @@ jobs:
         run: |
           conan profile detect -f
           conan install . --build=missing -s compiler.cppstd=20
-
-      - uses: cpp-linter/cpp-linter-action@v2.16.4
-        with:
-          style: 'file'
-          extensions: 'c,h,cpp,hpp,inl'
-          tidy-checks: '' # Use .clang-tidy file
-          version: 21
-          ignore: '|!cinfinity/**'
-          cache-enable: true

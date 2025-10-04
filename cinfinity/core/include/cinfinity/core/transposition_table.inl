@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_INL
 #define INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_INL
 
@@ -10,7 +8,7 @@ namespace cinfinity::core {
         return sizeof(uint16_t) + 
             sizeof(size_t) + 
             sizeof(absl::flat_hash_map<uint16_t, float>) + 
-            (policy.size() * (sizeof(uint16_t) + sizeof(float)));
+            (m_policy.size() * (sizeof(uint16_t) + sizeof(float)));
     }
 
     TranspositionTable::TranspositionTable() {
@@ -91,7 +89,7 @@ namespace cinfinity::core {
                 Entry* entry = it->second.get();
                 
                 // Only evict old entries
-                if (entry->last_used < m_currentGeneration) {
+                if (entry->getLastUsed() < m_currentGeneration) {
                     bytesRemoved += entry->size();
                     bucket->m_data.erase(it);
                 } 
