@@ -4,7 +4,6 @@
 #include <onnxruntime_cxx_api.h>
 #include <thread>
 
-
 namespace cinfinity::nn {
 class Model {
   Ort::MemoryInfo m_memoryInfo;

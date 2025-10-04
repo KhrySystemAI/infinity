@@ -1,3 +1,39 @@
+/**
+ * @file core/transposition_table.hpp
+ * @brief Declares the TranspositionTable class and its supporting structures.
+ *
+ * @details
+ * The TranspositionTable is a core component of the Infinity Chess Engine.
+ * It stores previously evaluated positions to avoid redundant computation
+ * and accelerate search performance.
+ *
+ * ### Components
+ * - **Entry**: Represents a stored evaluation, including policy, value,
+ *   visit count, and last-used generation tag.
+ * - **Bucket**: A thread-safe container that maps 64-bit position hashes
+ *   to Entries using `absl::flat_hash_map`.
+ *
+ * ### Concurrency
+ * All methods within the table are designed to be fully thread-safe.
+ *
+ * ### Eviction
+ * Eviction can occur based on memory limits or generation counts. The
+ * `m_currentGeneration` field ensures that only entries older than the
+ * current search generation may be pruned when calling functions such as
+ * `bytesDelete()`.
+ *
+ * ### Methods
+ * - `batchCreate()`: Insert multiple entries efficiently.
+ * - `read()`: Lookup entries by key.
+ * - `batchDelete()`: Remove multiple entries.
+ * - `bytesDelete()`: Evict entries until a target byte count is freed.
+ *
+ * @note This table is designed to support Monte Carlo Tree Search (MCTS)
+ * and PUCT-style policies for move selection and backpropagation.
+ *
+ * @copyright (c) 2025 The Infinity Chess Engine Project
+ * @license SPDX-License-Identifier: GPL-3.0-only
+ */
 #ifndef INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP
 #define INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP
 
@@ -56,9 +92,9 @@ class TranspositionTable {
   auto bytesDelete(size_t bytes) -> bool;
 
  private:
-  std::array<std::unique_ptr<Bucket>, 256> m_buckets;
+  std::array<std::unique_ptr<Bucket>, 256> m_buckets{};
   uint16_t m_currentGeneration;
-  absl::BitGen m_bitgen;
+  absl::BitGen m_bitgen{};
 
 };  // class TranspositionTable
 }  // namespace cinfinity::core
@@ -66,5 +102,6 @@ class TranspositionTable {
 #endif  // INCLUDE_CINFINITY_CORE_TRANSPOSITION_TABLE_HPP
 
 #ifndef CINFINITY_NO_IMPLEMENTATION
+// NOLINTNEXTLINE(misc-include-cleaner)
 #include "transposition_table.inl"
 #endif  // CINFINITY_NO_IMPLEMENTATION

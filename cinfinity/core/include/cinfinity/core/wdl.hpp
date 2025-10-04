@@ -21,5 +21,6 @@ class WDL {
 #endif  // INCLUDE_CINFINITY_CORE_WDL_HPP
 
 #ifndef CINFINITY_NO_IMPLEMENTATION
+// NOLINTNEXTLINE(misc-include-cleaner)
 #include "wdl.inl"
 #endif
