@@ -7,7 +7,7 @@ A high-performance C++20 transformer chess engine.
 Infinity is designed as a general architecture based on projects like **Lc0** and **AlphaZero**. It features:
 
 * **C++ core inference** via **ONNX Runtime**
-* **Python training core** via **PyTorch** (bindings in progress)
+* **Python training core** via **PyTorch**
 * **Official Python bindings** (planned)
 * **Lichess bot frontend**
 

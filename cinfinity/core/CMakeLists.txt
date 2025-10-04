@@ -16,10 +16,9 @@ target_include_directories(cinfinity_core INTERFACE
 )
 
 target_link_libraries(cinfinity_core INTERFACE 
-    abseil::flat_hash_map
-    abseil::logging
-    abseil::random
-    abseil::synchronization
+    absl::flat_hash_map
+    absl::random_random
+    absl::synchronization
 )
 
 add_library(cinfinity::core ALIAS cinfinity_core)

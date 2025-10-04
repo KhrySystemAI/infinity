@@ -11,6 +11,7 @@ namespace cinfinity::core {
             _NODISCARD float winChance() const noexcept;
             _NODISCARD float drawChance() const noexcept;
             _NODISCARD float lossChance() const noexcept;
+            _NODISCARD WDL invert() const noexcept;
 
         private:
             std::array<float, 2> m_data;

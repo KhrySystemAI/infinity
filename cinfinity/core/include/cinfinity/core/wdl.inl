@@ -24,6 +24,10 @@ namespace cinfinity::core {
     float WDL::lossChance() const noexcept {
         return m_data[1];
     }
+
+    WDL WDL::invert() const noexcept {
+        return {m_data[1], drawChance(), m_data[0]};
+    }
 } // namespace cinfinity::core
 
 #endif // INCLUDE_CINFINITY_CORE_WDL_INL

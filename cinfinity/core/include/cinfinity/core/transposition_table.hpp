@@ -40,8 +40,11 @@ namespace cinfinity::core {
             }; // struct Entry
 
             struct Bucket {
-                absl::flat_hash_map<uint64_t, std::unique_ptr<Entry>> m_data;
-                absl::Mutex m_lock;
+                friend class TranspositionTable;
+
+                private:
+                    absl::flat_hash_map<uint64_t, std::unique_ptr<Entry>> m_data;
+                    absl::Mutex m_lock;
             }; // struct Bucket
 
             TranspositionTable();
