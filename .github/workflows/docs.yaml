@@ -4,12 +4,12 @@ on:
   push: 
     branches: 
       - 'master'
-  tags:
-    - 'v*'
+    tags:
+      - 'v*'
 
 jobs:
   build-docs:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
