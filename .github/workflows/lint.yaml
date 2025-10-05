@@ -12,34 +12,65 @@ jobs:
   cpp-linter:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
+
       - uses: conan-io/setup-conan@v1.2.0
         with:
           cache_packages: true
 
-      - name: Install Conan Dependencies
+      - name: Build
         run: |
-          conan install . --build=missing -s compiler.cppstd=20
+          conan build . --build=missing -s %:compiler.cppstd=20 -o export_compile_commands=True -o build_tests=True -o build_fuzzing=True
+
+      - uses: cpp-linter/cpp-linter-action@v2.16.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: 'file'
+          extensions: 'cpp,hpp,inl'
+          tidy-checks: '' # Use .clang-tidy file
+          version: 21
+          ignore: '|!chess/**|!core/**|!memory/**|!nn/**'
+          thread-comments: update
+          files-changed-only: false
+          no-lgtm: false
+          step-summary: true
+          database: '${{github.workspace}}/build'
+          tidy-review: true
+          format-review: true
+          cache-enable: true
+
+  cpp-sanitizer:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sanitizer:
+          - A
+          - M
+          - T
+          - UB
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - uses: conan-io/setup-conan@v1.2.0
+        with:
+          cache_packages: true
 
       - name: Build
         run: |
-          conan build . -s compiler.cppstd=20
+          conan build . --build=missing -s %:compiler.cppstd=20 -o export_compile_commands=True -o build_tests=True -o build_fuzzing=True -o sanitizer=${{ matrix.sanitizer }}
 
-      - name: Export Compile Commands
+      - name: Test
         run: |
-          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          ctest build
 
-      - uses: cpp-linter/cpp-linter-action@v2.16.4
-        with:
-          style: 'file'
-          extensions: 'c,h,cpp,hpp,inl'
-          tidy-checks: '' # Use .clang-tidy file
-          version: 21
-          ignore: '|!cinfinity/**'
-          files-changed-only: false
-          cache-enable: true
-          database: build
+

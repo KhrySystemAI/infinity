@@ -1,0 +1,30 @@
+name: Fuzzing
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - uses: conan-io/setup-conan@v1.2.0
+        with:
+          cache_packages: true
+
+      - name: Build
+        run: |
+          conan build . --build=missing -s %:compiler.cppstd=20 -o export_compile_commands=True -o build_tests=True -o build_fuzzing=True
+
+      - name: Test
+        run: |
+          ctest .

@@ -10,22 +10,34 @@ string(STRIP "${PROJECT_VERSION_FULL}" PROJECT_VERSION_FULL)
 # Strip off any suffix like "-beta", "-rc1", etc. for CMake's project() version
 string(REGEX REPLACE "-.*$" "" PROJECT_VERSION "${PROJECT_VERSION_FULL}")
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/externals/sanitizers-cmake/cmake")
+
 project(Infinity 
     VERSION ${PROJECT_VERSION}
+    DESCRIPTION "A C++20 transformer chess bot."
+    HOMEPAGE_URL "https://github.com/KhrySystemAI/Infinity" 
+    LANGUAGES CXX
 )
 
 if(${WIN32})
-    set(INFINITY_COMPILE_FUZZING CACHE BOOL OFF)
+    set(INFINITY_COMPILE_FUZZING CACHE BOOL OFF FORCE)
     mark_as_advanced(INFINITY_COMPILE_FUZZING)
 else()
     option(INFINITY_COMPILE_FUZZING "" ${PROJECT_IS_TOP_LEVEL})
 endif() 
 
 if(${INFINITY_COMPILE_FUZZING})
-    set(INFINITY_COMPILE_TESTS CACHE BOOL ON)
+    set(INFINITY_COMPILE_TESTS CACHE BOOL ON FORCE)
     mark_as_advanced(INFINITY_COMPILE_FUZZING)
 else()
     option(INFINITY_COMPILE_TESTS "" ${PROJECT_IS_TOP_LEVEL})
 endif()
 
-add_subdirectory(cinfinity)
+option(INFINITY_BUILD_DOCS "" ${PROJECT_IS_TOP_LEVEL})
+
+add_subdirectory(bindings)
+add_subdirectory(chess)
+add_subdirectory(core)
+add_subdirectory(docs)
+add_subdirectory(memory)
+add_subdirectory(nn)
