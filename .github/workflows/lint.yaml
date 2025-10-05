@@ -36,7 +36,7 @@ jobs:
           extensions: 'cpp,hpp,inl'
           tidy-checks: '' # Use .clang-tidy file
           version: 21
-          ignore: '|!bindings/**|!chess/**|!core/**|!memory/**|!nn/**'
+          ignore: '|!chess/**|!core/**|!memory/**|!nn/**'
           thread-comments: update
           files-changed-only: false
           no-lgtm: false
