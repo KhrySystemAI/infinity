@@ -1,4 +1,4 @@
-name: Linux Build
+name: Build
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           recursive: true
-          
+
       - uses: conan-io/setup-conan@v1.2.0
         with:
           cache_packages: true

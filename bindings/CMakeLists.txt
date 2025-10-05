@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.30)
 
 find_package(pybind11 REQUIRED CONFIG)
-find_package(Sanitizers REQUIRED)
+find_package(Sanitizers)
 
 add_library(cinfinity_bindings_cxx STATIC
     src/cinfinity_cxx_bindings.cpp

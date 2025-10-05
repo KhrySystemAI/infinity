@@ -10,7 +10,7 @@ string(STRIP "${PROJECT_VERSION_FULL}" PROJECT_VERSION_FULL)
 # Strip off any suffix like "-beta", "-rc1", etc. for CMake's project() version
 string(REGEX REPLACE "-.*$" "" PROJECT_VERSION "${PROJECT_VERSION_FULL}")
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/externals/sanitizers-cmake/cmake" ${CMAKE_MODULE_PATH})
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/externals/sanitizers-cmake/cmake")
 
 project(Infinity 
     VERSION ${PROJECT_VERSION}
