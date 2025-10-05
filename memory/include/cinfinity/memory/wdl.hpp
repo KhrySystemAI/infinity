@@ -5,7 +5,7 @@
 
 namespace cinfinity::memory {
 class WDL {
- public:
+  public:
   WDL(float win, float draw, float loss);
 
   [[nodiscard]] auto winChance() const noexcept -> float;
@@ -13,7 +13,7 @@ class WDL {
   [[nodiscard]] auto lossChance() const noexcept -> float;
   [[nodiscard]] auto invert() const noexcept -> WDL;
 
- private:
+  private:
   std::array<float, 2> m_data;
 };
 }  // namespace cinfinity::memory

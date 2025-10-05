@@ -10,9 +10,7 @@ float TranspositionTable::Entry::getPolicy(uint16_t move) const noexcept {
   return (it != m_policy.end()) ? it->second : -1.0f;
 }
 
-WDL TranspositionTable::Entry::getValue() const noexcept {
-  return m_value;
-}
+WDL TranspositionTable::Entry::getValue() const noexcept { return m_value; }
 
 size_t TranspositionTable::Entry::getVisits() const noexcept {
   return m_visits;
@@ -36,9 +34,10 @@ TranspositionTable::TranspositionTable() {
 }
 
 bool TranspositionTable::batchCreate(
-    std::vector<std::tuple<uint8_t, uint64_t,
-                           std::unique_ptr<TranspositionTable::Entry>>>
-        entries) {
+    std::vector<std::tuple<
+        uint8_t, uint64_t, std::unique_ptr<TranspositionTable::Entry>>>
+        entries
+) {
   std::array<std::vector<std::tuple<uint64_t, std::unique_ptr<Entry>>>, 256>
       bucketsData;
   bool duplicateFound = false;
@@ -49,8 +48,7 @@ bool TranspositionTable::batchCreate(
 
   for (size_t i = 0; i < bucketsData.size(); i++) {
     auto& vals = bucketsData[i];
-    if (vals.empty())
-      continue;
+    if (vals.empty()) continue;
 
     auto& bucket = m_buckets[i];
     absl::WriterMutexLock lock(&bucket->m_lock);
@@ -67,21 +65,21 @@ bool TranspositionTable::batchCreate(
 }
 
 TranspositionTable::Entry* TranspositionTable::read(
-    std::tuple<uint8_t, uint64_t> key) {
+    std::tuple<uint8_t, uint64_t> key
+) {
   auto& [bucket_id, hash] = key;
-  auto& bucket = m_buckets[bucket_id];
+  auto& bucket            = m_buckets[bucket_id];
   absl::ReaderMutexLock lock(&bucket->m_lock);
-  if (bucket->m_data.contains(hash)) {
-    auto ptr = bucket->m_data[hash].get();
-    ptr->m_visits++;
-    ptr->m_lastUsed = m_currentGeneration;
-    return ptr;
-  }
-  return nullptr;
+  if (!bucket->m_data.contains(hash)) return nullptr;
+  auto ptr = bucket->m_data[hash].get();
+  ptr->m_visits++;
+  ptr->m_lastUsed = m_currentGeneration;
+  return ptr;
 }
 
 bool TranspositionTable::batchDelete(
-    std::vector<std::tuple<uint8_t, uint64_t>> keys) {
+    std::vector<std::tuple<uint8_t, uint64_t>> keys
+) {
   std::array<std::vector<uint64_t>, 256> bucketsData;
   bool notFound = false;
   for (auto& [bucket_id, hash] : keys) {
@@ -90,8 +88,7 @@ bool TranspositionTable::batchDelete(
 
   for (size_t i = 0; i < bucketsData.size(); i++) {
     auto& vals = bucketsData[i];
-    if (vals.empty())
-      continue;
+    if (vals.empty()) continue;
 
     auto& bucket = m_buckets[i];
 

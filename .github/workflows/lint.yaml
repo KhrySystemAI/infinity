@@ -17,6 +17,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          recursive: true
+
       - uses: conan-io/setup-conan@v1.2.0
         with:
           cache_packages: true
@@ -42,3 +45,32 @@ jobs:
           tidy-review: true
           format-review: true
           cache-enable: true
+
+  cpp-sanitizer:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sanitizer:
+          - A
+          - M
+          - T
+          - UB
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          recursive: true
+
+      - uses: conan-io/setup-conan@v1.2.0
+        with:
+          cache_packages: true
+
+      - name: Build
+        run: |
+          conan build . --build=missing -s %:compiler.cppstd=20 -o export_compile_commands=True -o build_tests=True -o build_fuzzing=True -o sanitizer=${{ matrix.sanitizer }}
+
+      - name: Test
+        run: |
+          ctest build
+
+

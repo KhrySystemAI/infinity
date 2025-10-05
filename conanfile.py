@@ -17,7 +17,8 @@ class CinfinityConan(ConanFile):
         "build_docs": [True, False],
         "build_fuzzing": [True, False],
         "build_tests": [True, False],
-        "export_compile_commands": [True, False]
+        "export_compile_commands": [True, False],
+        "sanitizer": ["A", "T", "M", "UB", None]
     }
     
     default_options = {
@@ -25,6 +26,7 @@ class CinfinityConan(ConanFile):
         "build_fuzzing": False,
         "build_tests": False,
         "export_compile_commands": False,
+        "sanitizer": None
     }
     
     force_build_tests: bool = False
@@ -66,6 +68,17 @@ class CinfinityConan(ConanFile):
             
         if self.options.get_safe("export_compile_commands", False): # type: ignore
             tc.variables["CMAKE_EXPORT_COMPILE_COMMANDS"] = True
+            
+        if self.options.get_safe("sanitizer", None): # type: ignore
+            sani: str = self.options.get_safe("sanitizer", None) # type: ignore
+            if sani == "A":
+                tc.variables["SANITIZE_ADDRESS"] = True
+            elif sani == "M":
+                tc.variables["SANITIZE_MEMORY"] = True
+            elif sani == "T":
+                tc.variables["SANITIZE_THREAD"] = True
+            elif sani == "UB":
+                tc.variables["SANITIZE_UNDEFINED"] = True
             
         tc.generate()
 

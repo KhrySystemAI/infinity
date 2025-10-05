@@ -13,17 +13,13 @@ WDL::WDL(float w, float d, float l) {
   }
 }
 
-float WDL::winChance() const noexcept {
-  return m_data[0];
-}
+float WDL::winChance() const noexcept { return m_data[0]; }
 
 float WDL::drawChance() const noexcept {
   return 1 - (winChance() + lossChance());
 }
 
-float WDL::lossChance() const noexcept {
-  return m_data[1];
-}
+float WDL::lossChance() const noexcept { return m_data[1]; }
 
 WDL WDL::invert() const noexcept {
   return {m_data[1], drawChance(), m_data[0]};
