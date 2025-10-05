@@ -30,7 +30,7 @@ jobs:
 
       - name: Build
         run: |
-          conan build . --build=missing -s %:compiler.cppstd=20 -o build_tests=True
+          conan build . --build=missing -s compiler.cppstd=20 -o build_tests=True
 
       - name: Test
         run: |
